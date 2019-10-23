@@ -36,6 +36,59 @@ function printWeekDaysOfPeriod($datestart, $dateend, $dayofweek) {
 		$time += 1 * 24 * 60 * 60;
 	}
 }
+
+function isGoodNum($num) {
+    if ($num % 7 != 0 || $num % 3 != 0) 
+        return false;
+    $sumDigits = sumDigits($num);
+    if ($sumDigits % 7 != 0 || $sumDigits % 3 != 0)
+        return false;
+
+    return true;
+
+}
+
+function sumDigits($num) {
+    $sum = 0;
+    for ($i = 0; $i < strlen($num); $i++) {
+        $sum += substr($num, $i, 1);
+    }
+    return $sum;
+}
+
+function isGoodDigits($num) {
+    $has7 = false;
+    $has3 = false;
+
+    for ($i = 0; $i < strlen($num); $i++) {
+        $ch = substr($num, $i, 1);
+        if ($ch == 7)
+            $has7 = true;
+        elseif($ch == 3)
+            $has3 = true;
+        else 
+            return false;
+    }
+    return $has3 && $has7;
+}
+
+function genLowestNumber($seed = "") {
+    for ($i = 21; $i<999999999;$i++) {
+        if (!isGoodDigits($i))
+            continue;
+        if (isGoodNum($i))
+            return $i;
+        $sum = sumDigits($i);
+        println("genLowestNumber($i), %7=".($i%7).", %3=".($i%3).", sum = ".$sum."%7=".($sum%7)."%3=".($sum%3));
+    }
+    /*$sum = sumDigits($seed);
+    println("genLowestNumber($seed), %7=".($seed%7).", %3=".($seed%3).", sum = ".$sum."%7=".($sum%7)."%3=".($sum%3));
+    if ($seed != "" && isGoodNum($seed) || $seed > 999999) 
+        return $seed;
+    $num3 = genLowestNumber($seed."3");
+    $num7 = genLowestNumber($seed."7");
+    return min($num3, $num7);*/
+}
 function task1($edge) {
 	println();
 	println("task1($edge):");
@@ -91,9 +144,15 @@ function task6($year, $month) {
 		println("Несуществующий год и всё такое");
 		return;
 	};
-	$time = mktime(0,0,0,1,$month,$year);
-	printWeekdaysOfPeriod(date("Y-m-d"), date("Y-m-t"), 2);
+	$time = mktime(0,0,0,$month,1,$year);
+	printWeekdaysOfPeriod(date("Y-m-d", $time), date("Y-m-t", $time), 2);
 	
+}
+function task7(){
+    println();
+	println("task7():");
+    $num = genLowestNumber();
+    println($num);
 }
 //main:
 task1(10000);
@@ -105,3 +164,4 @@ task5([1,2,3,4,5,6,7,8,9,10], "строка");
 task5([1,2,3,4,5,6,7,8,9,10], "");
 task6(-1, 12);
 task6(2019,8);
+task7();
