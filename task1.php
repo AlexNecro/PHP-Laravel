@@ -23,6 +23,19 @@ function addStrToArray($arr, $str) {
 	}
 	return $arr;
 }
+function printWeekDaysOfPeriod($datestart, $dateend, $dayofweek) {
+	
+	$timestart = strtotime($datestart);
+	$timeend = strtotime($dateend);
+	
+	$time = $timestart;
+		
+	while($time <= $timeend) {
+		if (date('w', $time) == $dayofweek)
+			println(date("d.m.Y",$time));
+		$time += 1 * 24 * 60 * 60;
+	}
+}
 function task1($edge) {
 	println();
 	println("task1($edge):");
@@ -59,16 +72,8 @@ function task4($datestart, $dateend, $dayofweek) {
 	println();
 	println("task4($datestart, $dateend, $dayofweek):");
 	
-	$timestart = strtotime($datestart);
-	$timeend = strtotime($dateend);
+	printWeekdaysOfPeriod($datestart, $dateend, $dayofweek);
 	
-	$time = $timestart;
-		
-	while($time <= $timeend) {
-		if (date('w', $time) == $dayofweek)
-			println(date("d.m.Y",$time));
-		$time += 1 * 24 * 60 * 60;
-	}
 }
 function task5($arr, $str) {
 	println();
@@ -76,6 +81,18 @@ function task5($arr, $str) {
 	
 	$res = addStrToArray($arr, $str);
 	var_dump($res);
+	
+}
+function task6($year, $month) {
+	println();
+	println("task6($year, $month):");
+	
+	if ($year < 1 || $year > 9999) {
+		println("Несуществующий год и всё такое");
+		return;
+	};
+	$time = mktime(0,0,0,1,$month,$year);
+	printWeekdaysOfPeriod(date("Y-m-d"), date("Y-m-t"), 2);
 	
 }
 //main:
@@ -86,3 +103,5 @@ task3([1,2,3,"жопа",5,6,7,8,9,10]);
 task4("2019-08-1", "2019-08-31", 1);
 task5([1,2,3,4,5,6,7,8,9,10], "строка");
 task5([1,2,3,4,5,6,7,8,9,10], "");
+task6(-1, 12);
+task6(2019,8);
