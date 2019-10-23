@@ -15,6 +15,14 @@ function revert($str) {
 	
 	return $res;
 }
+function addStrToArray($arr, $str) {
+	if (count($arr) == 0 || $str == "")
+		return false;
+	for($i=0;$i<sizeof($arr);$i++) {
+		$arr[$i].=$str;
+	}
+	return $arr;
+}
 function task1($edge) {
 	println();
 	println("task1($edge):");
@@ -62,9 +70,19 @@ function task4($datestart, $dateend, $dayofweek) {
 		$time += 1 * 24 * 60 * 60;
 	}
 }
+function task5($arr, $str) {
+	println();
+	println("task5(".implode(",",$arr).", $str):");
+	
+	$res = addStrToArray($arr, $str);
+	var_dump($res);
+	
+}
 //main:
 task1(10000);
 task2("abcd");
 task3([1,2,3,4,5,6,7,8,9,10]);
 task3([1,2,3,"жопа",5,6,7,8,9,10]);
 task4("2019-08-1", "2019-08-31", 1);
+task5([1,2,3,4,5,6,7,8,9,10], "строка");
+task5([1,2,3,4,5,6,7,8,9,10], "");
