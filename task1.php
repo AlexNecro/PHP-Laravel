@@ -51,12 +51,15 @@ function task4($datestart, $dateend, $dayofweek) {
 	println();
 	println("task4($datestart, $dateend, $dayofweek):");
 	
-	$date = $datestart;
+	$timestart = strtotime($datestart);
+	$timeend = strtotime($dateend);
+	
+	$time = $timestart;
 		
-	while($date <= $dateend) {
-		if (date('w', strtotime($date)) == $dayofweek)
-			println($date);
-		    $date = strtotime("+1 days", strtotime($date));
+	while($time <= $timeend) {
+		if (date('w', $time) == $dayofweek)
+			println(date("d.m.Y",$time));
+		$time += 1 * 24 * 60 * 60;
 	}
 }
 //main:
@@ -64,4 +67,4 @@ task1(10000);
 task2("abcd");
 task3([1,2,3,4,5,6,7,8,9,10]);
 task3([1,2,3,"жопа",5,6,7,8,9,10]);
-task4("2019-08-1", "2019-08-31", 0);
+task4("2019-08-1", "2019-08-31", 1);
