@@ -1,6 +1,6 @@
 <?php
 //http://phptester.net/
-function println($text) {
+function println($text = "") {
 	echo($text."<br>");
 }
 
@@ -18,7 +18,8 @@ function revert($str) {
 }
 
 function task1($edge) {
-    println("task");
+	println();
+	println("task1:");
     
     println("1");
     
@@ -33,12 +34,26 @@ function task1($edge) {
 }
 
 function task2($str) {
-	
+	println();
 	println("task2:");
 	
 	println(revert($str));
 }
 
+function task3($arr) {
+	println();
+	println("task3:");
+	
+	if (gettype($arr[3]) == "string" || gettype($arr[6]) == "string" || gettype($arr[8]) == "string") {
+		println("Achtung! Achtung!");
+	} else {
+		println($arr[3] + $arr[6] + $arr[8]);
+	}
+	
+}
+
 //main:
 task1(10000);
 task2("abcd");
+task3([1,2,3,4,5,6,7,8,9,10]);
+task3([1,2,3,"жопа",5,6,7,8,9,10]);
