@@ -115,65 +115,106 @@ function printWeekDaysOfPeriod($datestart, $dateend, $dayofweek) {
 	}
 }
 
-function isDivisible($num) {
-    if ($num % 7 != 0 || $num % 3 != 0) 
+/* ========================== task7() ============================ */
+function genLowestNumber() {
+	
+	$numbers = array();
+	
+	array_push($numbers, 0);
+	
+	$iterations = 13;
+	
+	while ($iterations > 0) {
+		$iterations = $iterations - 1;
+		
+		$newnumbers = array();
+		
+		foreach ($numbers as $elem) {
+			
+			$elem7 =$elem*10 + 7;
+            $elem3 = $elem*10 + 3;
+			
+			if (isNumberOK($elem7)) {
+                
+				return $elem7;
+            };
+			
+			if (isNumberOK($elem3)) {
+				return $elem3;
+            };
+			
+			array_push($newnumbers, $elem3);
+			array_push($newnumbers, $elem7);
+		
+		};
+		
+        $numbers = $newnumbers;
+		
+	};
+	
+	return -1;	
+	
+}
+
+function isNumberOK($num) { 
+
+    if ($num % 7 != 0 || $num % 3 != 0)
         return false;
-    return true;
-}
-
-function sumDigits($num) {
-    $sum = 0;
-    for ($i = 0; $i < strlen($num); $i++) {
-        $sum += substr($num, $i, 1);
-    }
-    return $sum;
-}
-
-function isGoodDigits($num) {
+    
     $has7 = false;
-    $has3 = false;
+	$has3 = false;
+	
+    $sum = 0;
+    
+    $len = numberlen($num);
+	
+    for ($i = 0 ; $i < $len; $i++) {
+		
+        $ch = digit($num, $i, $len);
 
-    for ($i = 0; $i < strlen($num); $i++) {
-        $ch = substr($num, $i, 1);
-        if ($ch == 7)
-            $has7 = true;
-        elseif($ch == 3)
-            $has3 = true;
-        else 
-            return false;
-    }
-    return $has3 && $has7;
+		$sum = $sum + $ch;
+		
+		if ($ch == 7) {
+			$has7 = true;
+        } elseif ($ch == 3) {
+			$has3 = true;
+        } else {
+			return false;
+		};
+    };
+
+    return $has3 and $has7 and ($sum % 7 == 0) and ($sum % 3 == 0);
+	
 }
 
-function genLowestNumber($seed = 0) {
-    for ($i = $seed; $i<9999999999;$i*=21) {
-        //simple tests:
-        if (!isDivisible($i))
-            continue;
-            
-        if (!isGoodDigits($i))
-            continue;
+function digit($num, $pos, $len) {
+	
+	$temp = $num;
+	
+	for ($i = 0; $i < ($len - $pos); $i++) {
+		
+		$temp = $temp / 10;
+		
+    };
+	return (int)(($temp - (int)($temp)) * 10);
+	
+}
 
-        $sumDigits = sumDigits($i);
-
-        println("genLowestNumber($i), sum = ".$sumDigits.", %7=".($sumDigits%7).", %3=".($sumDigits%3));
-        if (!isDivisible($sumDigits))
-            continue;
-
-        return $i;
-        
-    }
-    /*$sum = sumDigits($seed);
-    println("genLowestNumber($seed), %7=".($seed%7).", %3=".($seed%3).", sum = ".$sum."%7=".($sum%7)."%3=".($sum%3));
-    if ($seed != "" && isGoodNum($seed) || $seed > 999999) 
-        return $seed;
-    $num3 = genLowestNumber($seed."3");
-    $num7 = genLowestNumber($seed."7");
-    return min($num3, $num7);*/
+function numberlen($num) {
+	
+	$k = 1;
+	
+	while( $num > 10) {
+		$num = $num / 10;
+		$k =$k + 1;
+    };
+	
+	return $k;
 }
 
 /* ==================== test suite ==============================*/
 //main:
+println("@alexnecro работа#1");
 task1(10000);
 task2("abcd");
 task3([1,2,3,4,5,6,7,8,9,10]);
@@ -183,4 +224,4 @@ task5([1,2,3,4,5,6,7,8,9,10], "строка");
 task5([1,2,3,4,5,6,7,8,9,10], "");
 task6(-1, 12);
 task6(2019,8);
-task7(); //ответ 3333377733, но очень долго
+task7(); //ответ 3333377733
