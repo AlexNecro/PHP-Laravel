@@ -145,8 +145,8 @@ function isGoodDigits($num) {
     return $has3 && $has7;
 }
 
-function genLowestNumber($seed = "") {
-    for ($i = 21; $i<999999999;$i++) {
+function genLowestNumber($seed = 0) {
+    for ($i = $seed; $i<9999999999;$i*=21) {
         //simple tests:
         if (!isDivisible($i))
             continue;
@@ -183,4 +183,4 @@ task5([1,2,3,4,5,6,7,8,9,10], "строка");
 task5([1,2,3,4,5,6,7,8,9,10], "");
 task6(-1, 12);
 task6(2019,8);
-task7();
+task7(); //ответ 3333377733, но очень долго
