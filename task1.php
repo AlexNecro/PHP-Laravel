@@ -1,8 +1,84 @@
 <?php
 //http://phptester.net/
+
+/* ========================== tasks =========================== */
+function task1($edge) {
+	println();
+	println("task1($edge):");
+    
+    println("1");
+    
+    $result = 2;
+    do {
+        
+        println($result);
+        
+        $result *= 2;
+        
+    } while ($result < $edge);
+}
+
+function task2($str) {
+	println();
+	println("task2($str):");
+	
+	println(revert($str));
+}
+
+function task3($arr) {
+	println();
+	println("task3([".implode(",",$arr)."]):");
+	
+	if (gettype($arr[3]) == "string" || gettype($arr[6]) == "string" || gettype($arr[8]) == "string") {
+		println("Achtung! Achtung!");
+	} else {
+		println($arr[3] + $arr[6] + $arr[8]);
+	}
+	
+}
+
+function task4($datestart, $dateend, $dayofweek) {
+	println();
+	println("task4($datestart, $dateend, $dayofweek):");
+	
+	printWeekdaysOfPeriod($datestart, $dateend, $dayofweek);
+	
+}
+
+function task5($arr, $str) {
+	println();
+	println("task5(".implode(",",$arr).", $str):");
+	
+	$res = addStrToArray($arr, $str);
+	var_dump($res);
+	
+}
+
+function task6($year, $month) {
+	println();
+	println("task6($year, $month):");
+	
+	if ($year < 1 || $year > 9999) {
+		println("Несуществующий год и всё такое");
+		return;
+	};
+	$time = mktime(0,0,0,$month,1,$year);
+	printWeekdaysOfPeriod(date("Y-m-d", $time), date("Y-m-t", $time), 2);
+	
+}
+
+function task7(){
+    println();
+	println("task7():");
+    $num = genLowestNumber();
+    println($num);
+}
+
+/* ========================== helper funcs ============================ */
 function println($text = "") {
 	echo($text."<br>");
 }
+
 function revert($str) {
 	
 	$res = "";
@@ -15,6 +91,7 @@ function revert($str) {
 	
 	return $res;
 }
+
 function addStrToArray($arr, $str) {
 	if (count($arr) == 0 || $str == "")
 		return false;
@@ -23,6 +100,7 @@ function addStrToArray($arr, $str) {
 	}
 	return $arr;
 }
+
 function printWeekDaysOfPeriod($datestart, $dateend, $dayofweek) {
 	
 	$timestart = strtotime($datestart);
@@ -37,15 +115,10 @@ function printWeekDaysOfPeriod($datestart, $dateend, $dayofweek) {
 	}
 }
 
-function isGoodNum($num) {
+function isDivisible($num) {
     if ($num % 7 != 0 || $num % 3 != 0) 
         return false;
-    $sumDigits = sumDigits($num);
-    if ($sumDigits % 7 != 0 || $sumDigits % 3 != 0)
-        return false;
-
     return true;
-
 }
 
 function sumDigits($num) {
@@ -74,12 +147,21 @@ function isGoodDigits($num) {
 
 function genLowestNumber($seed = "") {
     for ($i = 21; $i<999999999;$i++) {
+        //simple tests:
+        if (!isDivisible($i))
+            continue;
+            
         if (!isGoodDigits($i))
             continue;
-        if (isGoodNum($i))
-            return $i;
-        $sum = sumDigits($i);
-        println("genLowestNumber($i), %7=".($i%7).", %3=".($i%3).", sum = ".$sum."%7=".($sum%7)."%3=".($sum%3));
+
+        $sumDigits = sumDigits($i);
+
+        println("genLowestNumber($i), sum = ".$sumDigits.", %7=".($sumDigits%7).", %3=".($sumDigits%3));
+        if (!isDivisible($sumDigits))
+            continue;
+
+        return $i;
+        
     }
     /*$sum = sumDigits($seed);
     println("genLowestNumber($seed), %7=".($seed%7).", %3=".($seed%3).", sum = ".$sum."%7=".($sum%7)."%3=".($sum%3));
@@ -89,71 +171,8 @@ function genLowestNumber($seed = "") {
     $num7 = genLowestNumber($seed."7");
     return min($num3, $num7);*/
 }
-function task1($edge) {
-	println();
-	println("task1($edge):");
-    
-    println("1");
-    
-    $result = 2;
-    do {
-        
-        println($result);
-        
-        $result *= 2;
-        
-    } while ($result < $edge);
-}
-function task2($str) {
-	println();
-	println("task2($str):");
-	
-	println(revert($str));
-}
-function task3($arr) {
-	println();
-	println("task3([".implode(",",$arr)."]):");
-	
-	if (gettype($arr[3]) == "string" || gettype($arr[6]) == "string" || gettype($arr[8]) == "string") {
-		println("Achtung! Achtung!");
-	} else {
-		println($arr[3] + $arr[6] + $arr[8]);
-	}
-	
-}
-function task4($datestart, $dateend, $dayofweek) {
-	println();
-	println("task4($datestart, $dateend, $dayofweek):");
-	
-	printWeekdaysOfPeriod($datestart, $dateend, $dayofweek);
-	
-}
-function task5($arr, $str) {
-	println();
-	println("task5(".implode(",",$arr).", $str):");
-	
-	$res = addStrToArray($arr, $str);
-	var_dump($res);
-	
-}
-function task6($year, $month) {
-	println();
-	println("task6($year, $month):");
-	
-	if ($year < 1 || $year > 9999) {
-		println("Несуществующий год и всё такое");
-		return;
-	};
-	$time = mktime(0,0,0,$month,1,$year);
-	printWeekdaysOfPeriod(date("Y-m-d", $time), date("Y-m-t", $time), 2);
-	
-}
-function task7(){
-    println();
-	println("task7():");
-    $num = genLowestNumber();
-    println($num);
-}
+
+/* ==================== test suite ==============================*/
 //main:
 task1(10000);
 task2("abcd");
