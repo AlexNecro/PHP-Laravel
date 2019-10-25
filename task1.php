@@ -10,18 +10,14 @@ function task1($edge) {
     
     $result = 2;
     do {
-        
         println($result);
-        
         $result *= 2;
-        
     } while ($result < $edge);
 }
 
 function task2($str) {
 	println();
 	println("task2($str):");
-	
 	println(revert($str));
 }
 
@@ -33,16 +29,14 @@ function task3($arr) {
 		println("Achtung! Achtung!");
 	} else {
 		println($arr[3] + $arr[6] + $arr[8]);
-	}
-	
+	}	
 }
 
 function task4($datestart, $dateend, $dayofweek) {
 	println();
 	println("task4($datestart, $dateend, $dayofweek):");
 	
-	printWeekdaysOfPeriod($datestart, $dateend, $dayofweek);
-	
+	printWeekdaysOfPeriod($datestart, $dateend, $dayofweek);	
 }
 
 function task5($arr, $str) {
@@ -51,7 +45,6 @@ function task5($arr, $str) {
 	
 	$res = addStrToArray($arr, $str);
 	var_dump($res);
-	
 }
 
 function task6($year, $month) {
@@ -63,14 +56,20 @@ function task6($year, $month) {
 		return;
 	};
 	$time = mktime(0,0,0,$month,1,$year);
-	printWeekdaysOfPeriod(date("Y-m-d", $time), date("Y-m-t", $time), 2);
-	
+	printWeekdaysOfPeriod(date("Y-m-d", $time), date("Y-m-t", $time), 2);	
 }
 
 function task7(){
     println();
 	println("task7():");
     $num = genLowestNumber();
+    println($num);
+}
+
+function task7_recurrent(){
+    println();
+	println("task7_recurrent():");
+    $num = genLowestNumberRecurrent();
     println($num);
 }
 
@@ -84,9 +83,7 @@ function revert($str) {
 	$res = "";
 	
 	for ($i = strlen($str); $i--; $i>=0) {
-		
 		$res .= substr($str, $i, 1);
-		
 	}
 	
 	return $res;
@@ -105,7 +102,6 @@ function printWeekDaysOfPeriod($datestart, $dateend, $dayofweek) {
 	
 	$timestart = strtotime($datestart);
 	$timeend = strtotime($dateend);
-	
 	$time = $timestart;
 		
 	while($time <= $timeend) {
@@ -119,14 +115,9 @@ function printWeekDaysOfPeriod($datestart, $dateend, $dayofweek) {
 function genLowestNumber() {
 	
 	$numbers = array();
-	
 	array_push($numbers, 0);
 	
-	$iterations = 13;
-	
-	while ($iterations > 0) {
-		$iterations = $iterations - 1;
-		
+	while (true) {		
 		$newnumbers = array();
 		
 		foreach ($numbers as $elem) {
@@ -134,8 +125,7 @@ function genLowestNumber() {
 			$elem7 =$elem*10 + 7;
             $elem3 = $elem*10 + 3;
 			
-			if (isNumberOK($elem7)) {
-                
+			if (isNumberOK($elem7)) {       
 				return $elem7;
             };
 			
@@ -144,16 +134,12 @@ function genLowestNumber() {
             };
 			
 			array_push($newnumbers, $elem3);
-			array_push($newnumbers, $elem7);
-		
+			array_push($newnumbers, $elem7);	
 		};
-		
-        $numbers = $newnumbers;
-		
+        $numbers = $newnumbers;	
 	};
 	
-	return -1;	
-	
+	return -1;
 }
 
 function isNumberOK($num) { 
@@ -163,9 +149,7 @@ function isNumberOK($num) {
     
     $has7 = false;
 	$has3 = false;
-	
     $sum = 0;
-    
     $len = numberlen($num);
 	
     for ($i = 0 ; $i < $len; $i++) {
@@ -184,7 +168,6 @@ function isNumberOK($num) {
     };
 
     return $has3 and $has7 and ($sum % 7 == 0) and ($sum % 3 == 0);
-	
 }
 
 function digit($num, $pos, $len) {
@@ -197,7 +180,6 @@ function digit($num, $pos, $len) {
 		
     };
 	return (int)(($temp - (int)($temp)) * 10);
-	
 }
 
 function numberlen($num) {
@@ -210,6 +192,21 @@ function numberlen($num) {
     };
 	
 	return $k;
+}
+
+function genLowestNumberRecurrent($num = 0, $sum = 0, $d1qty = 0, $d2qty = 0, $levels = 15) {
+    $levels--;
+    
+    if ($levels==0) return $num;
+
+    if ($num%7==0 && $num%3==0 && $sum%7==0 && $sum%3==0 && $d1qty > 0 && $d2qty > 0) {
+        return $num;
+    }
+    
+    $branch3 = genLowestNumberRecurrent($num*10 + 3, $sum + 3, $d1qty + 1, $d2qty, $levels);
+    $branch7 = genLowestNumberRecurrent($num*10 + 7, $sum + 7, $d1qty, $d2qty + 1, $levels);
+
+    return min($branch3, $branch7);
 }
 
 /* ==================== test suite ==============================*/
@@ -225,3 +222,4 @@ task5([1,2,3,4,5,6,7,8,9,10], "");
 task6(-1, 12);
 task6(2019,8);
 task7(); //ответ 3333377733
+task7_recurrent(); //ответ 3333377733
