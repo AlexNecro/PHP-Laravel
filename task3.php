@@ -5,6 +5,7 @@ interface IDBConnection {
 	public function __construct($dbname, $user, $pass);
 	public function select($query);
 	public function exec($query);
+	public function lastInsertId();
 
 };
 
@@ -37,7 +38,11 @@ class MysqlConnection implements IDBConnection{
 
     public function exec($query) {
         return $this->db->exec($query);
-    }
+	}
+	
+	public function lastInsertId() {
+		return $this->db->lastInsertId();
+	}
 };
 
 class AnnounceDB implements IDataAdapter { //smth like templates needed: DataAdapter<T>
@@ -48,7 +53,7 @@ class AnnounceDB implements IDataAdapter { //smth like templates needed: DataAda
 
 		$query = "create table if not exists announces (
             id int auto_increment primary key,
-            title(varchar), text (text), author(varchar), created_at(datetime), updated_at(datetime)
+            title varchar(20), text text, author varchar(20), created_at datetime, updated_at datetime
         );";
         $this->db->exec($query);
 	}
@@ -80,9 +85,9 @@ class NewsDB implements IDataAdapter { //smth like templates needed: DataAdapter
 
 		$query = "create table if not exists news (
             id int auto_increment primary key,
-            title(varchar), text (text), link(varchar), created_at(datetime), updated_at(datetime)
+            title varchar(20), text text, link varchar(20), created_at datetime, updated_at datetime
         );";
-        $this->exec($query);
+        $this->db->exec($query);
 	}
 
 	public function all(){
@@ -158,3 +163,31 @@ class News implements IPublication {
 	}
 
 };
+
+//* ==================== helper funcs ============================ */
+function println($text = "") {
+	echo($text."<br>");
+}
+
+/* ======================= code =========================== */
+
+$db = new MysqlConnection('test', 'root', '');
+$announces = new AnnounceDB($db);
+$news = new NewsDB($db);
+
+for ($i = 0; $i < 100; $i++) {
+	$announces->create("Announce $i", "Announce text $i", "Announce author $i");
+	$news->create("News $i", "News $i", "Pepito");
+};
+
+$allnews = $news->all();
+$allannounces = $announces->all();
+
+foreach ($allnews as $pub) {
+	println($pub->getContent() . " // " . $pub->getSource()); //no meth for Title!!!
+}
+
+foreach ($allannounces as $pub) {
+	println($pub->getContent() . " // " . $pub->getSource());
+}
+
