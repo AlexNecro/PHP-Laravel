@@ -1,0 +1,28 @@
+<html>
+<script lang="js">
+
+    function fact(n) {
+        if (n == 1)
+            return n;
+        else
+            return fact(n - 1) * n;
+    }
+
+    Task = function (n) {
+
+        try {
+            n = parseInt(document.getElementById("factorial_base").value);
+        } catch (error) {
+
+        }
+
+        alert(n.toString() + '! = ' + fact(n));
+    }
+</script>
+
+<body>
+    <input type="text" id="factorial_base" />
+    <input type="submit" onclick="Task()">
+</body>
+
+</html>
